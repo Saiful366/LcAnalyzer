@@ -1,87 +1,154 @@
-# Lc_Analyzer — Fiji Plugin
+# LcAnalyzer
 
-**Author:** Saiful Islam  
-**Version:** 1.0.0  
-**License:** MIT
+**Fiji / ImageJ Plugin for Chemi & Membrane Image Analysis**
 
-A Fiji/ImageJ plugin for Chemi vs Membrane ROI threshold and particle analysis.
+> Author: Saiful Islam | Version: 1.0.6 | Platform: Fiji / ImageJ (macOS)
 
 ---
 
-## Features
+## Overview
 
-- **F1** — Duplicates the current rectangular ROI selection, inverts it (Chemi mode), and opens the Colour Threshold dialog.
-- **F2** — Closes the Colour Threshold dialog, then:
-  - **Chemi mode:** runs Measure
-  - **Membrane mode:** runs Analyse Particles (size ≥ 80 px, outlines + overlay)
-- Mode (chemi / membrane) is auto-detected from the image filename.
+LcAnalyzer is a Fiji/ImageJ plugin for analysing Chemi and Membrane images. It provides a floating control panel with keyboard shortcuts (F1/F2) for ROI thresholding, particle analysis, CSV export, drawing export, and image export — with left-to-right ordered results and silent window management.
 
 ---
 
 ## Requirements
 
-- [Fiji](https://fiji.sc/) (includes ImageJ)
-- Java 8 or higher
-- Maven 3.x (only needed to build from source)
+- macOS (tested on macOS with Fiji)
+- [Fiji](https://fiji.sc/) — download and install
+- Java 8 or higher (bundled with Fiji)
+- **Apache Maven 3.x** — required for building from source (see Installation)
 
 ---
 
-## Build from Source
+## Installation
+
+### 1. Install Maven
+
+**Option A — Homebrew (recommended):**
+```bash
+# Install Homebrew if not already installed:
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Add Homebrew to PATH (copy the 3 lines shown at end of install):
+echo >> ~/.zprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+
+# Install Maven:
+brew install maven
+```
+
+**Option B — Conda:**
+```bash
+conda install -c conda-forge maven
+```
+
+### 2. Clone or Download
 
 ```bash
-# 1. Clone or download this project
-cd Lc_Analyzer
+# Clone:
+git clone https://github.com/Saiful366/LcAnalyzer.git
+cd LcAnalyzer
 
-# 2. Build with Maven
+# Or download the zip and unzip:
+cd ~/Downloads/Lc_Analyzer
+```
+
+### 3. Build
+
+```bash
 mvn clean package
-
-# 3. The plugin jar will be at:
-#    target/Lc-Analyzer.jar
 ```
 
----
+A successful build ends with `BUILD SUCCESS` and produces `target/Lc-Analyzer.jar`.
 
-## Installation in Fiji
+### 4. Install into Fiji
 
-1. Build the jar (see above), or download a pre-built `Lc-Analyzer.jar`.
-2. Copy `Lc-Analyzer.jar` into your Fiji `plugins/` folder:
-   - **macOS:** `Fiji.app/plugins/`
-   - **Windows:** `Fiji/plugins/`
-   - **Linux:** `Fiji.app/plugins/`
-3. Restart Fiji.
-4. The plugin will appear under **Plugins > Lc_Analyzer**.
-
----
-
-## Usage
-
-1. Open Fiji and run **Plugins > Lc_Analyzer > Lc_Analyzer**.
-2. Select your image file in the dialog.
-3. Draw a **rectangle ROI** on the image.
-4. Press **F1** — the ROI is duplicated and the Colour Threshold dialog opens.
-5. Adjust the threshold as needed.
-6. Press **F2** — analysis runs automatically based on the detected mode.
-7. Repeat from step 3 for the next ROI.
-
----
-
-## Project Structure
-
-```
-Lc_Analyzer/
-├── pom.xml
-├── README.md
-└── src/
-    └── main/
-        ├── java/
-        │   └── sc/fiji/lc_analyzer/
-        │       └── Lc_Analyzer.java
-        └── resources/
-            └── plugins.config
+```bash
+cp target/Lc-Analyzer.jar /Applications/Fiji.app/plugins/
 ```
 
+Restart Fiji. The plugin appears under **Plugins > LcAnalyzer**.
+
 ---
 
-## License
+## How to Use
 
-MIT License — free to use, modify, and distribute.
+### Launch
+Go to **Plugins > LcAnalyzer**. A floating control panel opens.
+
+### Workflow
+
+1. Click **Browse Image...** to open your image. Mode (Chemi/Membrane) is auto-detected from the filename.
+2. Draw a **rectangle ROI** on the image.
+3. Press **F1** (or click *ROI to Threshold [F1]*) — duplicates the ROI as SelectedROI, inverts if Chemi, opens Colour Threshold.
+4. Adjust the threshold to select your signal.
+5. Click **Select** in the Colour Threshold panel. *(Required before F2 will proceed.)*
+6. Press **F2** (or click *Apply and Analyze [F2]*) — runs analysis:
+   - **Chemi mode:** runs Measure, records area, mean, intensity etc.
+   - **Membrane mode:** runs Analyse Particles (≥ 80 px), sorts ROIs left-to-right, labels Drawing and Results table in matching order.
+7. Results **accumulate** across multiple analyses. Use **Close All** to reset.
+
+---
+
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `F1` (fn+F1 on Mac) | Duplicate ROI → SelectedROI, invert (Chemi), open Colour Threshold |
+| `F2` (fn+F2 on Mac) | Run Measure (Chemi) or Analyse Particles (Membrane). Blocked until Select is clicked. |
+
+Shortcuts work globally — even when the image window has focus.
+
+---
+
+## Control Panel Buttons
+
+| Button | Colour | Description |
+|--------|--------|-------------|
+| Browse Image... | 🔵 Blue | Opens file browser; remembers last directory |
+| ROI to Threshold [F1] | 🟢 Green | Duplicates ROI, opens Colour Threshold |
+| Apply and Analyze [F2] | 🟠 Orange | Runs analysis. Blocked until Select clicked |
+| Export Results as CSV | 🟣 Purple | Saves full Results table to .csv |
+| Export Drawing of ROI | 🩵 Teal | Saves Drawing image as .png (Membrane only) |
+| Export SelectedROI | 🟡 Amber | Saves SelectedROI image as .png |
+| Close Results | ⚫ Grey | Silently closes Results window |
+| Close SelectedROI | ⚫ Grey | Silently closes SelectedROI image |
+| Close Drawing of ROI | ⚫ Grey | Silently closes Drawing window |
+| Close All | 🔴 Red | Closes all images, resets all state |
+
+---
+
+## Mode Detection
+
+Mode is auto-detected from the image filename:
+
+- Filename contains `membrane` → **Membrane mode**
+- Filename contains `chemi` → **Chemi mode**
+- Neither found → defaults to **Chemi mode**
+
+---
+
+## Results Ordering (Membrane Mode)
+
+After Analyse Particles, ROIs are sorted **left-to-right** by bounding box X position. Drawing labels (1, 2, 3…) and Results table row numbers always match. Labels continue sequentially across multiple analyses (e.g. analysis 1 gives 1–3, analysis 2 gives 4–6). **Close All** resets the counter.
+
+---
+
+## Troubleshooting
+
+| Issue | Fix |
+|-------|-----|
+| `zsh: command not found: mvn` | Maven not installed. See Installation → Install Maven |
+| `zsh: command not found: brew` | Run the 3 `eval` lines shown at end of Homebrew install |
+| `BUILD FAILURE — no POM` | Wrong folder. Run: `cd ~/Downloads/Lc_Analyzer` |
+| Plugin not in Fiji menu | Ensure jar is in `Fiji.app/plugins/` and Fiji restarted |
+| F1/F2 do nothing | LcAnalyzer panel must be open first |
+| F2 blocked | Click **Select** in Colour Threshold panel before F2 |
+| Export Drawing greyed out | Only activates after a Membrane F2 analysis |
+| Export SelectedROI greyed out | Activates after F2 for both Chemi and Membrane |
+
+---
+
+*LcAnalyzer v1.0.6 · Saiful Islam · Built with Fiji / ImageJ*
