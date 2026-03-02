@@ -1,6 +1,6 @@
 # LcAnalyzer
 
-**Fiji / ImageJ Plugin for Quantification and Monotoring of PLant Desease Symptoms in Arabidopsis**
+**Fiji / ImageJ Plugin for Quantification and Monotoring of Plant Desease Symptoms in Arabidopsis**
 
 > Author: Saiful Islam | Version: 1.0.6 | Platform: Fiji / ImageJ (macOS)
 
