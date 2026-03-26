@@ -1,15 +1,10 @@
 # LcAnalyzer
 
-**Fiji / ImageJ Plugin for Quantification and Monotoring of Plant Desease Symptoms in Arabidopsis**
-
-> Author: Saiful Islam | Version: 1.0.6 | Platform: Fiji / ImageJ (macOS)
-
----
-
-## Overview
-
 LcAnalyzer is a Fiji/ImageJ plugin for quantifying and monitoring of plant disease symptoms and bacterial spread in Arabidopsis. It utilizes Chemi and Membrane images obtained from Invitrogen iBright Imaging Systems. The plugin provides a floating control panel with keyboard shortcuts (F1/F2) for ROI thresholding, particle analysis, CSV and analyzed image export.
 
+<p align="center">
+  <img src="images/method.png" width="800">
+</p>
 ---
 
 ## Requirements
