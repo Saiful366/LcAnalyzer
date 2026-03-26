@@ -5,7 +5,6 @@ LcAnalyzer is a Fiji/ImageJ plugin for quantifying and monitoring of plant disea
 <p align="center">
   <img src="images/method.png" width="800">
 </p>
----
 
 ## Requirements
 
